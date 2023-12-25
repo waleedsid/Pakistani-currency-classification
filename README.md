@@ -31,54 +31,7 @@ currency-classification/
 - The `models` folder stores the trained machine learning models.
 - The `src` folder holds the source code for data preprocessing, training, and prediction scripts.
 
-## Getting Started
 
-To set up the project locally, follow these steps:
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/waleedsid/currency-classification.git
-    ```
-
-2. Navigate to the project folder:
-
-    ```bash
-    cd currency-classification
-    ```
-
-3. Create and activate a virtual environment:
-
-    ```bash
-    python -m venv venv
-    source venv/bin/activate   # On Windows, use venv\Scripts\activate
-    ```
-
-4. Install dependencies:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## Training the Model
-
-To train the machine learning model, run the following command:
-
-```bash
-python src/train.py
-```
-
-This script will preprocess the data, train the model, and save the trained model to the `models` folder.
-
-## Predictions
-
-To make predictions using the trained model, use the following command:
-
-```bash
-python src/predict.py path/to/new_image.jpg
-```
-
-Replace `path/to/new_image.jpg` with the path to the image you want to classify.
 
 ## Dependencies
 
@@ -90,7 +43,6 @@ This project relies on the following Python libraries:
 - [scikit-learn](https://scikit-learn.org/)
 - [tensorflow](https://www.tensorflow.org/)
 
-Install these dependencies using the command provided in the "Getting Started" section.
 
 ## Contributing
 
