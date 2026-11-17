@@ -22,4 +22,4 @@ jobs:
       run: python -m unittest discover -s tests -v
     - name: Analysing the code with pylint
       run: |
-        pylint src tests
+        PYTHONPATH=. python -m pylint src tests

@@ -5,10 +5,8 @@ import random
 import shutil
 
 
-def split_data(source, train_dest, test_dest, split_ratio=0.8, seed=42):
-    if not 0 < split_ratio < 1:
-        raise ValueError('split_ratio must be strictly between 0 and 1')
-    source, train_dest, test_dest = [Path(p).resolve() for p in (source, train_dest, test_dest)]
+def _validate_paths(source, train_dest, test_dest):
+    """Reject overlapping inputs and populated outputs before copying."""
     paths = (source, train_dest, test_dest)
     for i, a in enumerate(paths):
         for b in paths[i + 1:]:
@@ -19,6 +17,14 @@ def split_data(source, train_dest, test_dest, split_ratio=0.8, seed=42):
     for dest in (train_dest, test_dest):
         if dest.exists() and (not dest.is_dir() or any(dest.iterdir())):
             raise ValueError('Destinations must be absent or empty; use fresh output paths')
+
+
+def split_data(source, train_dest, test_dest, split_ratio=0.8, seed=42):
+    """Copy a reproducible per-class partition into fresh directories."""
+    if not 0 < split_ratio < 1:
+        raise ValueError('split_ratio must be strictly between 0 and 1')
+    source, train_dest, test_dest = [Path(p).resolve() for p in (source, train_dest, test_dest)]
+    _validate_paths(source, train_dest, test_dest)
     rng = random.Random(seed)
     plan, counts = [], {}
     for folder in sorted(source.iterdir()):
@@ -46,6 +52,7 @@ def split_data(source, train_dest, test_dest, split_ratio=0.8, seed=42):
 
 
 def main():
+    """Parse paths and split settings from the command line."""
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, default=root / 'data-rescaled')
@@ -55,7 +62,9 @@ def main():
     parser.add_argument('--seed', type=int, default=42)
     args = parser.parse_args()
     try:
-        counts = split_data(args.source, args.train_dest, args.test_dest, args.split_ratio, args.seed)
+        counts = split_data(
+            args.source, args.train_dest, args.test_dest, args.split_ratio, args.seed
+        )
     except (ValueError, OSError) as error:
         parser.exit(2, f'Split failed: {error}\n')
     for label, count in counts.items():
